@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Chaves</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Controle de Chaves</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html" class="active">📊 Dashboard</a></li>
+                    <li><a href="retirada.html">🔑 Registrar Retirada</a></li>
+                    <li><a href="devolucao.html">↩️ Registrar Devolução</a></li>
+                    <li><a href="#">📋 Relatórios</a></li>
+                    <li><a href="#">⚙️ Gerenciar</a></li>
+                    <li class="nav-logout"><a href="index.html">🚪 Sair</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Dashboard</h1>
+                <p>Visão geral e atividades recentes do sistema.</p>
+            </header>
+
+            <section class="stats-container">
+                <div class="stat-card">
+                    <h4>Total de Chaves</h4>
+                    <p id="stat-total-chaves">50</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Chaves Ocupadas</h4>
+                    <p id="stat-chaves-ocupadas" class="text-danger">2</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Disponíveis</h4>
+                    <p id="stat-chaves-disponiveis" class="text-success">48</p>
+                </div>
+            </section>
+
+            <section class="dashboard-cards">
+                <div class="card">
+                    <h2>Ações Rápidas</h2>
+                    <div class="quick-actions">
+                        <a href="retirada.html" class="btn btn-primary">Registrar Nova Retirada</a>
+                        <a href="devolucao.html" class="btn btn-secondary">Registrar Devolução</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Alertas e Atividades</h2>
+                    <div class="activity-section">
+                        <h4>⚠️ Chaves com Devolução Atrasada</h4>
+                        <ul id="lista-alertas" class="activity-list">
+                            </ul>
+                    </div>
+                    <div class="activity-section">
+                        <h4>🔄 Últimas Movimentações</h4>
+                        <ul id="lista-atividades" class="activity-list">
+                           </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

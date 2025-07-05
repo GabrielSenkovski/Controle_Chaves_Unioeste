@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Devolução de Chave - Unioeste</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h3>Controle de Chaves</h3></div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html">📊 Dashboard</a></li>
+                    <li><a href="retirada.html">🔑 Registrar Retirada</a></li>
+                    <li><a href="devolucao.html" class="active">↩️ Registrar Devolução</a></li>
+                    <li><a href="#">📋 Relatórios</a></li>
+                    <li><a href="#">⚙️ Gerenciar</a></li>
+                    <li class="nav-logout"><a href="index.html">🚪 Sair</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Registrar Devolução de Chave</h1>
+                <p>Busque pela chave para registrar sua devolução.</p>
+            </header>
+            
+            <div class="card">
+                <form id="formDevolucaoChave">
+                    <section class="form-section">
+                        <h2>1. Busque a Chave a ser Devolvida</h2>
+                        <div class="form-group">
+                            <label for="buscarChaveOcupada">Buscar por Código da Chave ou Nome do Ambiente:</label>
+                            <input type="text" id="buscarChaveOcupada" name="buscarChaveOcupada" placeholder="Ex: LABINF03, Sala 102A...">
+                        </div>
+                    </section>
+                    <div id="detalhesTransacao" class="hidden">
+                        <section class="form-section">
+                            <h2>2. Confirme os Dados da Retirada</h2>
+                            <div class="info-box">
+                                <p><strong>Código da Chave:</strong> <span id="codigoChave"></span></p>
+                                <p><strong>Descrição/Ambiente:</strong> <span id="descricaoChave"></span></p><hr>
+                                <p><strong>Retirada por (Solicitante):</strong> <span id="nomeSolicitante"></span></p>
+                                <p><strong>Matrícula/SIAPE:</strong> <span id="idSolicitante"></span></p>
+                                <p><strong>Data e Hora da Retirada:</strong> <span id="dataHoraRetirada"></span></p>
+                            </div>
+                        </section>
+                        <section class="form-section">
+                            <h2>3. Detalhes da Devolução</h2>
+                            <div class="form-group"><label for="dataDevolucao">Data da Devolução:</label><input type="date" id="dataDevolucao" name="dataDevolucao" readonly></div>
+                            <div class="form-group"><label for="horaDevolucao">Hora da Devolução:</label><input type="time" id="horaDevolucao" name="horaDevolucao" readonly></div>
+                            <div class="form-group"><label for="observacoes">Observações:</label><textarea id="observacoes" name="observacoes" rows="3"></textarea></div>
+                        </section>
+                        <section class="actions-section">
+                            <button type="submit" class="btn btn-primary">Confirmar Devolução</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+                        </section>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="devolucao.js"></script>
+</body>
+</html>

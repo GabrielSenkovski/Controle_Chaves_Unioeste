@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Retirada de Chave - Unioeste</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h3>Controle de Chaves</h3></div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html">📊 Dashboard</a></li>
+                    <li><a href="retirada.html" class="active">🔑 Registrar Retirada</a></li>
+                    <li><a href="devolucao.html">↩️ Registrar Devolução</a></li>
+                    <li><a href="#">📋 Relatórios</a></li>
+                    <li><a href="#">⚙️ Gerenciar</a></li>
+                    <li class="nav-logout"><a href="index.html">🚪 Sair</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Registrar Retirada de Chave</h1>
+                <p>Preencha os dados para registrar a saída de uma chave.</p>
+            </header>
+            
+            <div class="card">
+                <form id="formRetiradaChave">
+                    <section class="form-section">
+                        <h2>1. Selecione a Chave</h2>
+                        <div class="form-group">
+                            <label for="buscarChave">Buscar Chave (Código ou Nome do Ambiente):</label>
+                            <input type="text" id="buscarChave" name="buscarChave" placeholder="Ex: LAB01, Sala 102A">
+                        </div>
+                        <div id="infoChaveSelecionada" class="info-box hidden">
+                            <p><strong>Código da Chave:</strong> <span id="codigoChave"></span></p>
+                            <p><strong>Descrição/Ambiente:</strong> <span id="descricaoChave"></span></p>
+                            <p><strong>Status Atual:</strong> <span id="statusChave"></span></p>
+                        </div>
+                    </section>
+
+                    <fieldset id="fieldset-solicitante" class="form-section" disabled>
+                        <legend>2. Identifique o Solicitante</legend>
+                        <div class="form-group">
+                            <label for="buscarSolicitante">Buscar Solicitante (Matrícula/SIAPE ou Nome):</label>
+                            <input type="text" id="buscarSolicitante" name="buscarSolicitante" placeholder="Ex: 123456, João Silva">
+                        </div>
+                        <div id="infoSolicitante">
+                            <div class="form-group">
+                                <label for="nomeSolicitante">Nome Completo:</label>
+                                <input type="text" id="nomeSolicitante" name="nomeSolicitante" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="vinculoSolicitante">Vínculo:</label>
+                                <select id="vinculoSolicitante" name="vinculoSolicitante" disabled>
+                                    <option value="">Selecione...</option>
+                                    <option value="aluno">Aluno</option>
+                                    <option value="servidor">Servidor</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="idSolicitante">Matrícula/SIAPE:</label>
+                                <input type="text" id="idSolicitante" name="idSolicitante" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="cursoSetorSolicitante">Curso/Setor:</label>
+                                <input type="text" id="cursoSetorSolicitante" name="cursoSetorSolicitante" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefoneSolicitante">Telefone para Contato:</label>
+                                <input type="text" id="telefoneSolicitante" name="telefoneSolicitante" readonly>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <section class="form-section">
+                        <h2>3. Confirme os Detalhes da Retirada</h2>
+                        <div class="form-group">
+                            <label for="dataRetirada">Data da Retirada:</label>
+                            <input type="date" id="dataRetirada" name="dataRetirada" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="horaRetirada">Hora da Retirada:</label>
+                            <input type="time" id="horaRetirada" name="horaRetirada" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="observacoes">Observações (Opcional):</label>
+                            <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+                        </div>
+                    </section>
+
+                    <section class="actions-section">
+                        <button type="submit" class="btn btn-primary">Confirmar Retirada</button>
+                        <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+                    </section>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="retirada.js"></script>
+    
+</body>
+</html>

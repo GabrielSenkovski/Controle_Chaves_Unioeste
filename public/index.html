@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Chaves Unioeste</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <header>
+            <h1>Sistema de Controle de Chaves</h1>
+            <p>Acesso Restrito - Unioeste</p>
+        </header>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Usuário (SIAPE):</label>
+                <input type="text" id="username" name="username" placeholder="Digite sua matrícula SIAPE" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+            </div>
+            <div class="actions-section">
+                <button type="submit" class="btn btn-primary btn-full-width">Entrar</button>
+            </div>
+            <div class="forgot-password">
+                <a href="#">Esqueceu sua senha?</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const loginContainer = document.querySelector('.login-container');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (username === 'admin' && password === '1234') {
+                    alert('Login bem-sucedido! Redirecionando para o sistema.');
+                    // CORREÇÃO APLICADA AQUI:
+                    window.location.href = 'dashboard.html'; 
+                } else {
+                    loginContainer.classList.add('shake');
+                    alert('Usuário ou senha inválidos.');
+                    setTimeout(() => {
+                        loginContainer.classList.remove('shake');
+                    }, 500);
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
