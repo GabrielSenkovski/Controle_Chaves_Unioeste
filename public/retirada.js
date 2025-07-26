@@ -1,179 +1,211 @@
 class FormularioRetirada {
-    // O construtor não recebe mais os dados mock, ele vai buscá-los.
     constructor(formId) {
         this.formElement = document.getElementById(formId);
         if (!this.formElement) return;
 
-        // As listas de dados agora começam vazias.
         this.chaves = [];
-        this.solicitantes = [];
+        this.isBuscandoChave = false;
 
         this.selecionarElementosDOM();
         this.vincularEventos();
-        
-        // Novo método para carregar os dados iniciais do backend.
         this.carregarDadosIniciais();
         this.definirEstadoInicial();
     }
 
-    // O método 'selecionarElementosDOM' continua igual.
     selecionarElementosDOM() {
-        this.buscarChave = document.getElementById('buscarChave');
+        // CORRIGIDO: Renomeado para evitar conflito com o nome do método 'buscarChave'
+        this.buscarChaveInput = document.getElementById('buscarChave'); 
         this.infoChaveDiv = document.getElementById('infoChaveSelecionada');
         this.codigoChaveSpan = document.getElementById('codigoChave');
         this.descricaoChaveSpan = document.getElementById('descricaoChave');
         this.statusChaveSpan = document.getElementById('statusChave');
-        this.buscarSolicitanteInput = document.getElementById('buscarSolicitante');
+        this.fieldsetSolicitante = document.getElementById('fieldset-solicitante');
+        
         this.camposSolicitante = {
             nome: document.getElementById('nomeSolicitante'),
             vinculo: document.getElementById('vinculoSolicitante'),
-            id: document.getElementById('idSolicitante'),
             cursoSetor: document.getElementById('cursoSetorSolicitante'),
             telefone: document.getElementById('telefoneSolicitante')
         };
+        
         this.dataField = document.getElementById('dataRetirada');
         this.horaField = document.getElementById('horaRetirada');
         this.observacoesField = document.getElementById('observacoes');
         this.btnCancelar = document.getElementById('btnCancelar');
-        this.fieldsetSolicitante = document.getElementById('fieldset-solicitante');
     }
 
+    vincularEventos() {
+        this.formElement.addEventListener('submit', this.manipularSubmit.bind(this));
+        this.btnCancelar.addEventListener('click', this.manipularCancelar.bind(this));
+        
+        this.buscarChaveInput.addEventListener('blur', this.manipularBuscaChave.bind(this));
+        this.buscarChaveInput.addEventListener('input', (e) => {
+            if (e.target.value.trim() === "") this.limparInfoChave();
+        });
 
-// quando o usuário digitar o nome da chave e pressionar "Enter", a busca será executada imediatamente
+        this.buscarChaveInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const sucesso = this.manipularBuscaChave(event); 
+                if (sucesso) {
+                    // CORRIGIDO: Move o foco para o primeiro campo editável do solicitante
+                    this.camposSolicitante.nome.focus();
+                }
+            }
+        });
 
-vincularEventos() {
-    this.formElement.addEventListener('submit', this.manipularSubmit.bind(this));
-    this.btnCancelar.addEventListener('click', this.manipularCancelar.bind(this));
     
-    // Evento de 'blur' (quando sai do campo) - JÁ EXISTE
-    this.buscarChave.addEventListener('blur', this.manipularBuscaChave.bind(this));
-    this.buscarChave.addEventListener('input', (e) => {
-        if (e.target.value.trim() === "") this.limparInfoChave();
-    });
+    }
 
-    // --- CÓDIGO NOVO A SER ADICIONADO ---
-    // Adiciona um evento para a tecla 'Enter' no campo de busca da chave
-    this.buscarChave.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Impede que o 'Enter' envie o formulário inteiro
-            this.manipularBuscaChave(event); // Roda a mesma função de busca
-            this.buscarSolicitanteInput.focus(); // Move o cursor para o próximo campo, melhorando o fluxo!
-        }
-    });
-    // --- FIM DO CÓDIGO NOVO ---
+    definirEstadoInicial() {
+        const now = new Date();
+        const timezoneOffset = now.getTimezoneOffset() * 60000;
+        const localNow = new Date(now.valueOf() - timezoneOffset);
+        this.dataField.value = localNow.toISOString().split('T')[0];
+        this.horaField.value = localNow.toTimeString().slice(0, 5);
+    }
 
-    this.buscarSolicitanteInput.addEventListener('blur', this.manipularBuscaSolicitante.bind(this));
-    // ... o resto do método continua igual ...
-}
-
-    // --- NOVOS E MODIFICADOS MÉTODOS ---
-
-    // NOVO: Carrega os dados de chaves e solicitantes do servidor quando a página abre.
     async carregarDadosIniciais() {
         try {
             const response = await fetch('/api/dados-iniciais');
-            if (!response.ok) {
-                throw new Error('Falha ao carregar dados do servidor.');
-            }
             const dados = await response.json();
             this.chaves = dados.chaves;
-            this.solicitantes = dados.solicitantes;
-            console.log('Dados iniciais carregados:', this);
         } catch (error) {
             console.error(error);
-            alert('Não foi possível carregar os dados do sistema. Tente recarregar a página.');
+            alert('Não foi possível carregar os dados do sistema.');
         }
     }
 
-
-async manipularSubmit(event) {
-    event.preventDefault();
-
-    // --- ADICIONE ESTE BLOCO DE CÓDIGO PARA DEPURAÇÃO ---
-    console.log("--- INICIANDO DEPURAÇÃO DO SUBMIT ---");
-    console.log("1. Código da Chave que estou vendo:", `'${this.codigoChaveSpan.textContent}'`);
-    console.log("2. Status da Chave que estou vendo:", `'${this.statusChaveSpan.textContent}'`);
-    console.log("3. ID do Solicitante que estou vendo:", `'${this.camposSolicitante.id.value}'`);
-    console.log("-----------------------------------------");
-    // --- FIM DO BLOCO DE DEPURAÇÃO ---
-
-
-    // Validação 1: Código da Chave está preenchido?
-    if (!this.codigoChaveSpan.textContent) {
-        alert("VALIDAÇÃO 1 FALHOU: Por favor, selecione uma chave válida.");
-        return;
-    }
-    // Validação 2: Status da Chave é 'Disponível'?
-    // Vamos tornar essa verificação mais robusta, ignorando espaços e maiúsculas/minúsculas.
-    if (this.statusChaveSpan.textContent.trim().toLowerCase() !== 'disponível') {
-        alert(`VALIDAÇÃO 2 FALHOU: A chave está com status '${this.statusChaveSpan.textContent}' e não pode ser retirada.`);
-        return;
-    }
-    // Validação 3: ID do Solicitante está preenchido?
-    if (!this.camposSolicitante.id.value) {
-        alert("VALIDAÇÃO 3 FALHOU: Por favor, identifique o solicitante.");
-        return;
+    buscarChave(termo) {
+        if (!termo) return null;
+        const termoLower = termo.toLowerCase().trim();
+        return this.chaves.find(chave =>
+            chave.id.toLowerCase().includes(termoLower) ||
+            chave.descricao.toLowerCase().includes(termoLower)
+        ) || null;
     }
 
-    // O resto do código para o fetch continua aqui...
-    const dadosRetirada = { /* ... */ };
-    try {
-        const response = await fetch('/api/retirada', { /* ... */ });
-        // ...
-    } catch (error) {
-        // ...
+    exibirInfoChave(chave) {
+        this.codigoChaveSpan.textContent = chave.id;
+        this.descricaoChaveSpan.textContent = chave.descricao;
+        this.statusChaveSpan.textContent = chave.status;
+        this.infoChaveDiv.classList.remove('hidden');
     }
-}
-    
-    // Todos os outros métodos (definirEstadoInicial, buscarChave, exibirInfoChave, etc.) continuam os mesmos
-    // pois eles agora operam nas listas this.chaves e this.solicitantes que foram preenchidas pela API.
-    definirEstadoInicial() { /* ...código igual ao anterior... */ }
-    buscarChave(termo) { /* ...código igual ao anterior... */ }
-    exibirInfoChave(chave) { /* ...código igual ao anterior... */ }
-    
-    
+
     limparInfoChave() {
         this.codigoChaveSpan.textContent = "";
         this.descricaoChaveSpan.textContent = "";
         this.statusChaveSpan.textContent = "";
         this.infoChaveDiv.classList.add('hidden');
-
-        // ADICIONE ESTA LINHA PARA TRAVAR NOVAMENTE A SEÇÃO
         this.fieldsetSolicitante.disabled = true;
-        this.limparInfoSolicitante(); // Limpa os campos do solicitante também
+        this.limparInfoSolicitante();
     }
-    buscarSolicitante(termo) { /* ...código igual ao anterior... */ }
-    exibirInfoSolicitante(solicitante) { /* ...código igual ao anterior... */ }
-    limparInfoSolicitante() { /* ...código igual ao anterior... */ }
-    tornarCampoEditavel(event) { /* ...código igual ao anterior... */ }
+
+    limparInfoSolicitante() {
+        Object.values(this.camposSolicitante).forEach(campo => campo.value = "");
+        // Reseta o select para a opção padrão
+        this.camposSolicitante.vinculo.selectedIndex = 0;
+    }
     
     manipularBuscaChave(event) {
-    const termoBusca = event.target.value;
-    const chaveEncontrada = this.buscarChave(termoBusca);
-    console.log(termoBusca);
-    console.log(chaveEncontrada);
+    // Se a função já estiver rodando, não faça nada e saia imediatamente.
+    if (this.isBuscandoChave) return false;
 
-    if (chaveEncontrada) {
-        this.exibirInfoChave(chaveEncontrada);
-        
-        // --- LÓGICA DE TRAVAR/DESTRAVAR ---
-        if (chaveEncontrada.status.trim().toLowerCase() === 'disponível') {
-            // Se a chave está disponível, HABILITA a seção do solicitante
-            this.fieldsetSolicitante.disabled = false;
+    try {
+        // Ativa a trava para impedir novas execuções
+        this.isBuscandoChave = true;
+
+        const termoBusca = event.target.value;
+        const chaveEncontrada = this.buscarChave(termoBusca);
+
+        if (chaveEncontrada) {
+            this.exibirInfoChave(chaveEncontrada);
+            
+            if (chaveEncontrada.status.trim().toLowerCase() === 'disponível') {
+                this.fieldsetSolicitante.disabled = false;
+                return true; // Sucesso
+            } else {
+                this.fieldsetSolicitante.disabled = true;
+                alert(`Atenção: A chave '${chaveEncontrada.id}' não está disponível.`);
+                return false; // Falha
+            }
         } else {
-            // Se não está disponível, DESABILITA a seção do solicitante
-            this.fieldsetSolicitante.disabled = true;
-            alert(`Atenção: A chave '${chaveEncontrada.id}' não está disponível.`);
+            this.limparInfoChave();
+            return false; // Falha
         }
-    } else {
-        this.limparInfoChave();
+    } finally {
+        // O bloco 'finally' SEMPRE é executado no final, garantindo que a trava seja liberada
+        // para que a função possa ser chamada novamente no futuro.
+        // Usamos um pequeno delay para dar tempo ao navegador de resolver os eventos de foco.
+        setTimeout(() => {
+            this.isBuscandoChave = false;
+        }, 100); 
     }
- }
-    manipularBuscaSolicitante(event) { /* ...código igual ao anterior... */ }
-    manipularCancelar() { /* ...código igual ao anterior... */ }
 }
 
-// O ponto de entrada agora não passa mais os dados mock.
+    manipularCancelar() {
+        if (confirm("Deseja realmente cancelar?")) {
+            this.formElement.reset();
+            this.limparInfoChave();
+        }
+    }
+    
+    async manipularSubmit(event) {
+        event.preventDefault();
+        
+        if (!this.codigoChaveSpan.textContent) {
+            alert("Por favor, selecione uma chave válida.");
+            return;
+        }
+        if (this.statusChaveSpan.textContent.trim().toLowerCase() !== 'disponível') {
+            alert(`A chave não está disponível para retirada.`);
+            return;
+        }
+        if (!this.camposSolicitante.nome.value || !this.camposSolicitante.vinculo.value) {
+            alert("Por favor, preencha todos os dados obrigatórios do solicitante.");
+            return;
+        }
+
+        const dadosRetirada = {
+            codigoChave: this.codigoChaveSpan.textContent,
+            descricaoChave: this.descricaoChaveSpan.textContent,
+            solicitante: {
+                nome: this.camposSolicitante.nome.value,
+                vinculo: this.camposSolicitante.vinculo.value,
+                cursoSetor: this.camposSolicitante.cursoSetor.value,
+                telefone: this.camposSolicitante.telefone.value
+            },
+            dataHoraRetirada: new Date().toISOString()
+        };
+
+        try {
+            const response = await fetch('/api/retirada', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosRetirada),
+            });
+
+            if (!response.ok) {
+                const erro = await response.json();
+                throw new Error(erro.message);
+            }
+
+            alert("Retirada registrada com sucesso!");
+            
+            const chaveRetirada = this.chaves.find(c => c.id === dadosRetirada.codigoChave);
+            if (chaveRetirada) chaveRetirada.status = 'Ocupada';
+
+            this.formElement.reset();
+            this.limparInfoChave();
+
+        } catch (error) {
+            console.error('Erro ao registrar retirada:', error);
+            alert(`Falha ao registrar: ${error.message}`);
+        }
+    }
+}
+
+// O ponto de entrada da aplicação continua o mesmo
 document.addEventListener('DOMContentLoaded', () => {
     new FormularioRetirada('formRetiradaChave');
 });

@@ -42,39 +42,32 @@
                             <p><strong>Status Atual:</strong> <span id="statusChave"></span></p>
                         </div>
                     </section>
-
                     <fieldset id="fieldset-solicitante" class="form-section" disabled>
-                        <legend>2. Identifique o Solicitante</legend>
-                        <div class="form-group">
-                            <label for="buscarSolicitante">Buscar Solicitante (Matrícula/SIAPE ou Nome):</label>
-                            <input type="text" id="buscarSolicitante" name="buscarSolicitante" placeholder="Ex: 123456, João Silva">
-                        </div>
+                        <legend>2. Identifique o Solicitante (Entrada Manual)</legend>
+                        
                         <div id="infoSolicitante">
                             <div class="form-group">
                                 <label for="nomeSolicitante">Nome Completo:</label>
-                                <input type="text" id="nomeSolicitante" name="nomeSolicitante" readonly>
+                                <input type="text" id="nomeSolicitante" name="nomeSolicitante" required>
                             </div>
                             <div class="form-group">
                                 <label for="vinculoSolicitante">Vínculo:</label>
-                                <select id="vinculoSolicitante" name="vinculoSolicitante" disabled>
-                                    <option value="">Selecione...</option>
+                                <select id="vinculoSolicitante" name="vinculoSolicitante" required>
+                                    <option value="" disabled selected>Selecione...</option>
                                     <option value="aluno">Aluno</option>
                                     <option value="servidor">Servidor</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="idSolicitante">Matrícula/SIAPE:</label>
-                                <input type="text" id="idSolicitante" name="idSolicitante" readonly>
-                            </div>
-                            <div class="form-group">
                                 <label for="cursoSetorSolicitante">Curso/Setor:</label>
-                                <input type="text" id="cursoSetorSolicitante" name="cursoSetorSolicitante" readonly>
+                                <input type="text" id="cursoSetorSolicitante" name="cursoSetorSolicitante" required>
                             </div>
                             <div class="form-group">
                                 <label for="telefoneSolicitante">Telefone para Contato:</label>
-                                <input type="text" id="telefoneSolicitante" name="telefoneSolicitante" readonly>
+                                <input type="tel" id="telefoneSolicitante" name="telefoneSolicitante" placeholder="(XX) XXXXX-XXXX" required>
                             </div>
-                        </div>
+                            
+                            </div>
                     </fieldset>
 
                     <section class="form-section">

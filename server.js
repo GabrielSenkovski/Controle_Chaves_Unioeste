@@ -52,25 +52,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rota GET para buscar todos os dados iniciais (chaves e solicitantes)
 app.get('/api/dados-iniciais', (req, res) => {
-    // Em um sistema real, você leria de tabelas diferentes.
-    // Aqui, vamos simular lendo de arquivos mock (se eles existissem) ou usando os dados que já temos.
-    // Por enquanto, vamos criar os dados aqui para o exemplo funcionar.
+    // 1. Esta é a nossa lista "mestra" de todas as chaves que existem.
+    const todasAsChaves = [
+        { id: "SALA101-A", descricao: "Sala de Aula 101 Bloco A", status: "Disponível" },
+        { id: "LABINF03", descricao: "Laboratório de Informática 03", status: "Disponível" }, // Status padrão é Disponível
+        { id: "AUDITORIO", descricao: "Auditório Principal", status: "Disponível" },
+        { id: "SALA205-B", descricao: "Sala de Reuniões 205 Bloco B", status: "Reservada" },
+        { id: "BIBLIO01", descricao: "Chave Geral Biblioteca", status: "Disponível" }
+    ];
+
+    // 2. Lemos o estado atual real do nosso "banco de dados" de retiradas.
+    const retiradasAtivas = lerBancoDeDados();
+
+    // 3. Criamos um conjunto (Set) com os códigos das chaves ativas para uma busca rápida.
+    const codigosChavesOcupadas = new Set(retiradasAtivas.map(retirada => retirada.codigoChave));
+
+    // 4. Mapeamos a lista mestra para criar uma nova lista com os status atualizados.
+    const chavesAtualizadas = todasAsChaves.map(chave => {
+        // Se o código da chave estiver no nosso conjunto de chaves ocupadas...
+        if (codigosChavesOcupadas.has(chave.id)) {
+            // ...retornamos a chave com o status "Ocupada".
+            return { ...chave, status: "Ocupada" };
+        }
+        // ...caso contrário, retornamos a chave com seu status original.
+        return chave;
+    });
+
+    // 5. Preparamos os dados finais para enviar ao frontend.
     const dados = {
-        chaves: [
-            { id: "SALA101-A", descricao: "Sala de Aula 101 Bloco A", status: "Disponível" },
-            { id: "LABINF03", descricao: "Laboratório de Informática 03", status: "Ocupada" },
-            { id: "AUDITORIO", descricao: "Auditório Principal", status: "Disponível" },
-            { id: "SALA205-B", descricao: "Sala de Reuniões 205 Bloco B", status: "Reservada" },
-            { id: "BIBLIO01", descricao: "Chave Geral Biblioteca", status: "Disponível" }
-        ],
+        chaves: chavesAtualizadas, // Enviamos a lista com os status corretos
         solicitantes: [
             { idMatriculaSiape: "654321", nome: "Maria Souza", vinculo: "servidor", cursoSetor: "Secretaria Geral", telefone: "(45) 98877-6655" },
             { idMatriculaSiape: "123456", nome: "João da Silva", vinculo: "aluno", cursoSetor: "Engenharia da Computação", telefone: "(45) 99999-8888" }
         ]
+        // Mantivemos a lista de solicitantes como estava, pois ela é estática por enquanto.
     };
+
     res.json(dados);
 });
-
 // Rota POST para registrar uma nova retirada
 app.post('/api/retirada', (req, res) => {
     const novaRetirada = req.body;

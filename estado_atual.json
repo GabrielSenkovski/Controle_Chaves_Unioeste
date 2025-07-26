@@ -1,0 +1,22 @@
+[
+  {
+    "codigoChave": "SALA101-A",
+    "descricaoChave": "Sala de Aula 101 Bloco A",
+    "solicitante": {
+      "nome": "Maria Souza",
+      "identificador_unico": "654321"
+    },
+    "dataHoraRetirada": "2025-07-26T02:31:46.303Z"
+  },
+  {
+    "codigoChave": "AUDITORIO",
+    "descricaoChave": "Auditório Principal",
+    "solicitante": {
+      "nome": "Joao da Silva",
+      "vinculo": "aluno",
+      "cursoSetor": "CC",
+      "telefone": "46 777777 7777"
+    },
+    "dataHoraRetirada": "2025-07-26T02:56:29.471Z"
+  }
+]
