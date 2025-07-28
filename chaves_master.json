@@ -1,0 +1,27 @@
+[
+  {
+    "id": "SALA101-A",
+    "descricao": "Sala de Aula 101 Bloco A",
+    "status": "Disponível"
+  },
+  {
+    "id": "LABINF03",
+    "descricao": "Laboratório de Informática 03",
+    "status": "Disponível"
+  },
+  {
+    "id": "AUDITORIO",
+    "descricao": "Auditório Principal",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA205-B",
+    "descricao": "Sala de Reuniões 205 Bloco B",
+    "status": "Reservada"
+  },
+  {
+    "id": "BIBLIO01",
+    "descricao": "Chave Geral Biblioteca",
+    "status": "Disponível"
+  }
+]

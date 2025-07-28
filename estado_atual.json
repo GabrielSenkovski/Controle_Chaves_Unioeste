@@ -18,5 +18,16 @@
       "telefone": "46 777777 7777"
     },
     "dataHoraRetirada": "2025-07-26T02:56:29.471Z"
+  },
+  {
+    "codigoChave": "BIBLIO01",
+    "descricaoChave": "Chave Geral Biblioteca",
+    "solicitante": {
+      "nome": "Pedro Geremias",
+      "vinculo": "servidor",
+      "cursoSetor": "CC",
+      "telefone": "44 44 44"
+    },
+    "dataHoraRetirada": "2025-07-28T06:42:55.663Z"
   }
 ]

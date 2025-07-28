@@ -9,6 +9,7 @@ const PORT = 3000; // A porta em que nosso servidor vai rodar
 
 // Caminho para o nosso "banco de dados" JSON
 const dbPath = path.join(__dirname, 'estado_atual.json');
+const chavesMasterPath = path.join(__dirname, 'chaves_master.json');
 
 // --- Funções Auxiliares para ler e escrever no "banco de dados" ---
 
@@ -52,44 +53,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rota GET para buscar todos os dados iniciais (chaves e solicitantes)
 app.get('/api/dados-iniciais', (req, res) => {
-    // 1. Esta é a nossa lista "mestra" de todas as chaves que existem.
-    const todasAsChaves = [
-        { id: "SALA101-A", descricao: "Sala de Aula 101 Bloco A", status: "Disponível" },
-        { id: "LABINF03", descricao: "Laboratório de Informática 03", status: "Disponível" }, // Status padrão é Disponível
-        { id: "AUDITORIO", descricao: "Auditório Principal", status: "Disponível" },
-        { id: "SALA205-B", descricao: "Sala de Reuniões 205 Bloco B", status: "Reservada" },
-        { id: "BIBLIO01", descricao: "Chave Geral Biblioteca", status: "Disponível" }
-    ];
+    try {
+            // 1. Lê a lista mestra de chaves do novo arquivo JSON
+            const todasAsChaves = JSON.parse(fs.readFileSync(chavesMasterPath, 'utf8'));
 
-    // 2. Lemos o estado atual real do nosso "banco de dados" de retiradas.
-    const retiradasAtivas = lerBancoDeDados();
+            // 2. Lê o estado atual de quais chaves estão em uso
+            const retiradasAtivas = lerBancoDeDados(); // Esta função já lê o 'estado_atual.json'
 
-    // 3. Criamos um conjunto (Set) com os códigos das chaves ativas para uma busca rápida.
-    const codigosChavesOcupadas = new Set(retiradasAtivas.map(retirada => retirada.codigoChave));
+            // 3. Cria um conjunto com os códigos das chaves ocupadas para busca rápida
+            const codigosChavesOcupadas = new Set(retiradasAtivas.map(retirada => retirada.codigoChave));
 
-    // 4. Mapeamos a lista mestra para criar uma nova lista com os status atualizados.
-    const chavesAtualizadas = todasAsChaves.map(chave => {
-        // Se o código da chave estiver no nosso conjunto de chaves ocupadas...
-        if (codigosChavesOcupadas.has(chave.id)) {
-            // ...retornamos a chave com o status "Ocupada".
-            return { ...chave, status: "Ocupada" };
+            // 4. Mapeia a lista mestra para atualizar o status de cada chave
+            const chavesAtualizadas = todasAsChaves.map(chave => {
+                if (codigosChavesOcupadas.has(chave.id)) {
+                    return { ...chave, status: "Ocupada" };
+                }
+                return chave;
+            });
+
+            // 5. Envia apenas a lista de chaves atualizada para o frontend
+            res.json({ chaves: chavesAtualizadas });
+
+        } catch (error) {
+            console.error("Erro ao carregar dados iniciais:", error);
+            res.status(500).json({ message: "Erro interno ao carregar dados do sistema." });
         }
-        // ...caso contrário, retornamos a chave com seu status original.
-        return chave;
     });
-
-    // 5. Preparamos os dados finais para enviar ao frontend.
-    const dados = {
-        chaves: chavesAtualizadas, // Enviamos a lista com os status corretos
-        solicitantes: [
-            { idMatriculaSiape: "654321", nome: "Maria Souza", vinculo: "servidor", cursoSetor: "Secretaria Geral", telefone: "(45) 98877-6655" },
-            { idMatriculaSiape: "123456", nome: "João da Silva", vinculo: "aluno", cursoSetor: "Engenharia da Computação", telefone: "(45) 99999-8888" }
-        ]
-        // Mantivemos a lista de solicitantes como estava, pois ela é estática por enquanto.
-    };
-
-    res.json(dados);
-});
 // Rota POST para registrar uma nova retirada
 app.post('/api/retirada', (req, res) => {
     const novaRetirada = req.body;
