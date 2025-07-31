@@ -1,36 +1,67 @@
-/**
- * Classe que gerencia todo o comportamento do formulário de devolução de chaves.
- */
 class FormularioDevolucao {
-    constructor(formId, dadosMock) {
+    constructor(formId) {
         this.formElement = document.getElementById(formId);
         if (!this.formElement) return;
 
-        this.retiradasAtivas = dadosMock.retiradasAtivas || [];
+        // Guarda a lista de retiradas ativas que vem do backend
+        this.retiradasAtivas = [];
+        this.retiradaSelecionada = null; // Guarda a retirada encontrada na busca
+
         this.selecionarElementosDOM();
         this.vincularEventos();
+        this.carregarDadosAtuais();
     }
 
     selecionarElementosDOM() {
         this.buscarChaveInput = document.getElementById('buscarChaveOcupada');
         this.detalhesTransacaoDiv = document.getElementById('detalhesTransacao');
+        
+        // Spans para exibir os dados
         this.codigoChaveSpan = document.getElementById('codigoChave');
         this.descricaoChaveSpan = document.getElementById('descricaoChave');
         this.nomeSolicitanteSpan = document.getElementById('nomeSolicitante');
-        this.idSolicitanteSpan = document.getElementById('idSolicitante');
+        // O idSolicitante (Matrícula) não existe mais no nosso novo fluxo, ficará em branco.
+        this.idSolicitanteSpan = document.getElementById('idSolicitante'); 
         this.dataHoraRetiradaSpan = document.getElementById('dataHoraRetirada');
+        
+        // Campos de data/hora da devolução
         this.dataDevolucaoInput = document.getElementById('dataDevolucao');
         this.horaDevolucaoInput = document.getElementById('horaDevolucao');
+        this.observacoesInput = document.getElementById('observacoes');
         this.btnCancelar = document.getElementById('btnCancelar');
     }
 
     vincularEventos() {
         this.formElement.addEventListener('submit', this.manipularSubmit.bind(this));
-        this.btnCancelar.addEventListener('click', this.manipularCancelar.bind(this));
+        this.btnCancelar.addEventListener('click', this.limparFormulario.bind(this));
+        
         this.buscarChaveInput.addEventListener('blur', this.manipularBuscaChave.bind(this));
         this.buscarChaveInput.addEventListener('input', (e) => {
-            if (e.target.value.trim() === "") this.detalhesTransacaoDiv.classList.add('hidden');
+            // Se o campo de busca for limpo, esconde os detalhes
+            if (e.target.value.trim() === "") {
+                this.detalhesTransacaoDiv.classList.add('hidden');
+            }
         });
+
+        this.buscarChaveInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this.manipularBuscaChave(event);
+            }
+        });
+    }
+
+    async carregarDadosAtuais() {
+        try {
+            // Busca o estado atual das chaves retiradas do backend
+            const response = await fetch('/api/estado');
+            if (!response.ok) throw new Error('Falha ao carregar retiradas ativas.');
+            
+            this.retiradasAtivas = await response.json();
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível carregar os dados de chaves em uso.');
+        }
     }
 
     buscarRetiradaAtiva(termo) {
@@ -42,13 +73,20 @@ class FormularioDevolucao {
         ) || null;
     }
 
-    preencherDados(transacao) {
-        this.codigoChaveSpan.textContent = transacao.codigoChave;
-        this.descricaoChaveSpan.textContent = transacao.descricaoChave;
-        this.nomeSolicitanteSpan.textContent = transacao.solicitante.nome;
-        this.idSolicitanteSpan.textContent = transacao.solicitante.idMatriculaSiape;
-        this.dataHoraRetiradaSpan.textContent = `${transacao.dataRetirada} às ${transacao.horaRetirada}`;
+    exibirInfoRetirada(retirada) {
+        this.retiradaSelecionada = retirada; // Guarda a retirada encontrada
 
+        this.codigoChaveSpan.textContent = retirada.codigoChave;
+        this.descricaoChaveSpan.textContent = retirada.descricaoChave;
+        this.nomeSolicitanteSpan.textContent = retirada.solicitante.nome;
+        // O campo Matrícula/SIAPE não existe mais no fluxo simplificado, então ficará vazio.
+        this.idSolicitanteSpan.textContent = retirada.solicitante.identificador_unico || 'N/A';
+        
+        // Formata a data e hora para exibição
+        const dataRetirada = new Date(retirada.dataHoraRetirada);
+        this.dataHoraRetiradaSpan.textContent = dataRetirada.toLocaleString('pt-BR');
+
+        // Preenche a data e hora atuais para a devolução
         const now = new Date();
         const timezoneOffset = now.getTimezoneOffset() * 60000;
         const localNow = new Date(now.valueOf() - timezoneOffset);
@@ -61,56 +99,60 @@ class FormularioDevolucao {
     limparFormulario() {
         this.formElement.reset();
         this.detalhesTransacaoDiv.classList.add('hidden');
+        this.retiradaSelecionada = null;
     }
 
     manipularBuscaChave(event) {
         const termoBusca = event.target.value;
-        const transacaoEncontrada = this.buscarRetiradaAtiva(termoBusca);
-        if (transacaoEncontrada) {
-            this.preencherDados(transacaoEncontrada);
+        const retiradaEncontrada = this.buscarRetiradaAtiva(termoBusca);
+
+        if (retiradaEncontrada) {
+            this.exibirInfoRetirada(retiradaEncontrada);
         } else {
             this.detalhesTransacaoDiv.classList.add('hidden');
-            if (termoBusca.trim() !== "") {
+            if (termoBusca) {
                 alert("Nenhuma retirada ativa encontrada para esta chave.");
             }
         }
     }
-
-    manipularCancelar() {
-        if (confirm("Deseja realmente cancelar esta operação?")) {
-            this.limparFormulario();
-        }
-    }
-
-    manipularSubmit(event) {
+    
+    async manipularSubmit(event) {
         event.preventDefault();
-        const codigoChaveAtual = this.codigoChaveSpan.textContent;
-        if (!codigoChaveAtual) {
-            alert("Erro: Nenhuma chave selecionada para devolução.");
+
+        if (!this.retiradaSelecionada) {
+            alert("Por favor, busque e selecione uma chave válida para devolver.");
             return;
         }
 
-        const indexTransacao = this.retiradasAtivas.findIndex(r => r.codigoChave === codigoChaveAtual);
-        if (indexTransacao > -1) {
-            this.retiradasAtivas.splice(indexTransacao, 1);
-            console.log(`Chave ${codigoChaveAtual} foi devolvida.`);
-            console.log("Retiradas ativas restantes:", this.retiradasAtivas);
-            alert(`Devolução da chave ${codigoChaveAtual} registrada com sucesso!`);
+        const dadosDevolucao = {
+            codigoChave: this.retiradaSelecionada.codigoChave,
+            observacoes: this.observacoesInput.value
+        };
+
+        try {
+            const response = await fetch('/api/devolucao', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosDevolucao),
+            });
+
+            if (!response.ok) {
+                const erro = await response.json();
+                throw new Error(erro.message);
+            }
+
+            alert(`Devolução da chave ${dadosDevolucao.codigoChave} registrada com sucesso!`);
             this.limparFormulario();
-        } else {
-            alert("Erro: A transação para esta chave não foi encontrada.");
+            // Recarrega os dados para que a chave devolvida não apareça mais na busca
+            this.carregarDadosAtuais();
+
+        } catch (error) {
+            console.error('Erro ao registrar devolução:', error);
+            alert(`Falha ao registrar devolução: ${error.message}`);
         }
     }
 }
 
-// Ponto de entrada da aplicação para esta página
 document.addEventListener('DOMContentLoaded', () => {
-    const dadosMock = {
-        retiradasAtivas: [
-            { transacaoId: 1, codigoChave: "LABINF03", descricaoChave: "Laboratório de Informática 03", solicitante: { idMatriculaSiape: "123456", nome: "João da Silva" }, dataRetirada: "2025-06-06", horaRetirada: "09:00" },
-            { transacaoId: 2, codigoChave: "SALA205-B", descricaoChave: "Sala de Reuniões 205 Bloco B", solicitante: { idMatriculaSiape: "654321", nome: "Maria Souza" }, dataRetirada: "2025-06-05", horaRetirada: "14:30" }
-        ]
-    };
-
-    new FormularioDevolucao('formDevolucaoChave', dadosMock);
+    new FormularioDevolucao('formDevolucaoChave');
 });

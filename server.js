@@ -125,3 +125,14 @@ app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
     console.log(`Acesse o sistema em: http://localhost:${PORT}`);
 });
+
+app.get('/api/estado', (req, res) => {
+    try {
+        // A função lerBancoDeDados já lê o arquivo 'estado_atual.json'
+        const retiradasAtivas = lerBancoDeDados(); 
+        res.json(retiradasAtivas);
+    } catch (error) {
+        console.error("Erro ao ler o estado das chaves:", error);
+        res.status(500).json({ message: "Erro interno ao buscar estado das chaves." });
+    }
+});

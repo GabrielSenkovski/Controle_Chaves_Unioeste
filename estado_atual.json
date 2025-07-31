@@ -1,25 +1,5 @@
 [
   {
-    "codigoChave": "SALA101-A",
-    "descricaoChave": "Sala de Aula 101 Bloco A",
-    "solicitante": {
-      "nome": "Maria Souza",
-      "identificador_unico": "654321"
-    },
-    "dataHoraRetirada": "2025-07-26T02:31:46.303Z"
-  },
-  {
-    "codigoChave": "AUDITORIO",
-    "descricaoChave": "Auditório Principal",
-    "solicitante": {
-      "nome": "Joao da Silva",
-      "vinculo": "aluno",
-      "cursoSetor": "CC",
-      "telefone": "46 777777 7777"
-    },
-    "dataHoraRetirada": "2025-07-26T02:56:29.471Z"
-  },
-  {
     "codigoChave": "BIBLIO01",
     "descricaoChave": "Chave Geral Biblioteca",
     "solicitante": {
@@ -29,5 +9,16 @@
       "telefone": "44 44 44"
     },
     "dataHoraRetirada": "2025-07-28T06:42:55.663Z"
+  },
+  {
+    "codigoChave": "LABINF03",
+    "descricaoChave": "Laboratório de Informática 03",
+    "solicitante": {
+      "nome": "Jao Pedro",
+      "vinculo": "aluno",
+      "cursoSetor": "CC",
+      "telefone": "46 66666"
+    },
+    "dataHoraRetirada": "2025-07-28T16:26:38.488Z"
   }
 ]
