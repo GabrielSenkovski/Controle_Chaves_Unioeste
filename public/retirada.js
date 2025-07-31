@@ -58,12 +58,19 @@ class FormularioRetirada {
     }
 
     definirEstadoInicial() {
-        const now = new Date();
-        const timezoneOffset = now.getTimezoneOffset() * 60000;
-        const localNow = new Date(now.valueOf() - timezoneOffset);
-        this.dataField.value = localNow.toISOString().split('T')[0];
-        this.horaField.value = localNow.toTimeString().slice(0, 5);
-    }
+        const agora = new Date(); // 'agora' já contém a data e hora locais corretas
+
+        // Formata a data para AAAA-MM-DD
+        const ano = agora.getFullYear();
+        const mes = String(agora.getMonth() + 1).padStart(2, '0'); // getMonth() começa em 0
+        const dia = String(agora.getDate()).padStart(2, '0');
+        this.dataField.value = `${ano}-${mes}-${dia}`;
+
+        // Formata a hora para HH:MM
+        const horas = String(agora.getHours()).padStart(2, '0');
+        const minutos = String(agora.getMinutes()).padStart(2, '0');
+        this.horaField.value = `${horas}:${minutos}`;
+}
 
     async carregarDadosIniciais() {
         try {
