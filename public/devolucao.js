@@ -79,8 +79,7 @@ class FormularioDevolucao {
         this.codigoChaveSpan.textContent = retirada.codigoChave;
         this.descricaoChaveSpan.textContent = retirada.descricaoChave;
         this.nomeSolicitanteSpan.textContent = retirada.solicitante.nome;
-        // O campo Matrícula/SIAPE não existe mais no fluxo simplificado, então ficará vazio.
-        this.idSolicitanteSpan.textContent = retirada.solicitante.identificador_unico || 'N/A';
+       
         
         // Formata a data e hora para exibição
         const dataRetirada = new Date(retirada.dataHoraRetirada);
