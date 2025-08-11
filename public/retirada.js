@@ -13,7 +13,7 @@ class FormularioRetirada {
     }
 
     selecionarElementosDOM() {
-        // CORRIGIDO: Renomeado para evitar conflito com o nome do método 'buscarChave'
+        // bug CORRIGIDO: Renomeado para evitar conflito com o nome do método 'buscarChave'
         this.buscarChaveInput = document.getElementById('buscarChave'); 
         this.infoChaveDiv = document.getElementById('infoChaveSelecionada');
         this.codigoChaveSpan = document.getElementById('codigoChave');
@@ -212,7 +212,7 @@ class FormularioRetirada {
     }
 }
 
-// O ponto de entrada da aplicação continua o mesmo
+// O ponto de entrada da aplicação 
 document.addEventListener('DOMContentLoaded', () => {
     new FormularioRetirada('formRetiradaChave');
 });
