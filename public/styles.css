@@ -1,209 +1,138 @@
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
+/* === ESTILOS GLOBAIS E FONTES === */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Estilo base para o corpo das páginas internas (Dashboard, etc.) */
+body {
+    line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
 }
 
-.container {
-    max-width: 800px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+/* === ESTILOS ESPECÍFICOS PARA A PÁGINA DE LOGIN === */
 
-header h1 {
-    text-align: center;
-    color: #0056b3; /* Tom de azul Unioeste aproximado */
-    margin-bottom: 20px;
-}
-
-.form-section {
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.form-section:last-of-type {
-    border-bottom: none;
-}
-
-.form-section h2 {
-    font-size: 1.2em;
-    color: #333;
-    margin-bottom: 15px;
-    border-left: 4px solid #0056b3;
-    padding-left: 8px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input[type="text"],
-.form-group input[type="tel"],
-.form-group input[type="date"],
-.form-group input[type="time"],
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box; /* Para padding não afetar largura total */
-}
-
-.form-group input[readonly],
-.form-group select[disabled] {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-}
-
-.info-box {
-    background-color: #eef7ff;
-    border: 1px solid #bde0fe;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 4px;
-}
-
-.info-box p {
-    margin: 5px 0;
-}
-
-.info-box.hidden {
-    display: none;
-}
-
-.actions-section {
-    text-align: right;
-    margin-top: 20px;
-}
-
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-left: 10px;
-}
-
-.btn-primary {
-    background-color: #007bff; /* Azul para ação primária */
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-secondary {
-    background-color: #6c757d; /* Cinza para ação secundária */
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #545b62;
-}
-
-/* Estilo para campos de busca e informações selecionadas */
-#infoChaveSelecionada, #infoSolicitante {
-    margin-top: 15px;
-}
-
-.form-group input.readonly-field,
-.form-group select.readonly-field {
-    background-color: #e9ecef; /* Cor de fundo para indicar campo 'bloqueado' */
-    /* cursor: pointer; */ /* Opcional: Mudar cursor para indicar que é clicável para editar */
-}
-
-/* Quando o campo se torna editável (classe removida), volta ao normal. */
-/* Se quiser um estilo específico para quando está editável após o clique: */
-.form-group input:not([readonly]):focus,
-.form-group select:not([disabled]):focus,
-.form-group textarea:focus {
-  border-color: #007bff; /* Exemplo: borda azul ao focar para edição */
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Exemplo: sombra ao focar */
-
-/* === ADIÇÕES PARA A PÁGINA DE LOGIN === */
-
-/* Estilo para o corpo da página de login, para centralizar o container */
-.login-body {
+/* Classe especial para o <body> da página de login */
+.login-page-body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #e9ecef; /* Um cinza um pouco mais escuro para diferenciar */
+    background: url('unioeste.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-/* Container específico para o login */
-.login-container {
-    max-width: 400px;
-    width: 100%;
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+/* Container do formulário de login (antigo .conteiner) */
+.login-page-body .container {
+    width: 420px;
+    background-color: rgba(17, 16, 16, 0.505);
+    border: 2px solid rgba(255, 255, 255, .2);
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+    padding: 30px 40px;
+    box-shadow: 0 8px 24px rgba(17, 17, 26, 0.1), 0 16px 56px rgba(17, 17, 26, 0.1);
 }
 
-/* Ajustes no header do login */
-.login-container header h1 {
-    font-size: 1.5em;
-    margin-bottom: 5px;
-}
-
-.login-container header p {
+.login-page-body .container h1 {
+    font-size: 36px;
     text-align: center;
-    margin-bottom: 25px;
-    color: #6c757d;
+    color: #fff; /* Garante que o H1 seja branco no login */
 }
 
-/* Botão de login com largura total */
-.btn-full-width {
+.input-box {
+    position: relative;
     width: 100%;
-    padding: 12px;
+    height: 50px;
+    margin: 30px 0;
 }
 
-/* Estilo para o link "Esqueceu sua senha?" */
-.forgot-password {
-    text-align: center;
-    margin-top: 15px;
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, .2);
+    border-radius: 40px;
+    outline: none;
+    font-size: 16px;
+    color: aliceblue;
+    padding: 20px 45px 20px 20px;
 }
 
-.forgot-password a {
-    color: #0056b3;
+.input-box input::placeholder {
+    color: rgb(221, 225, 229);
+}
+
+.input-box i {
+    position: absolute;
+    top: 50%; /* Centraliza melhor o ícone */
+    transform: translateY(-50%);
+    font-size: 20px;
+    right: 20px;
+}
+
+.lembrar-esqueci {
+    display: flex;
+    justify-content: space-between;
+    margin: -15px 0 15px;
     font-size: 0.9em;
-    text-decoration: none;
 }
 
-.forgot-password a:hover {
+.lembrar-esqueci label input {
+    accent-color: white;
+    margin-right: 5px;
+}
+
+.lembrar-esqueci a {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.lembrar-esqueci a:hover {
     text-decoration: underline;
 }
 
-/* Animação de tremor para feedback de erro no login */
-@keyframes shake {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+.login-page-body .btn-login {
+    width: 100%;
+    height: 50px;
+    background-color: aliceblue;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.963);
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
 }
 
-.shake {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+.login-page-body .btn-login:hover {
+    background-color: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, .2);
 }
 
-/* === ADIÇÕES PARA O DASHBOARD E NAVEGAÇÃO === */
+.cadastro {
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cadastro a {
+    text-decoration: none;
+    color: aliceblue;
+    font-weight: 600;
+}
+
+.cadastro a:hover {
+    text-decoration: underline;
+}
+
+/* === ESTILOS DA APLICAÇÃO PRINCIPAL (DASHBOARD, FORMULÁRIOS, ETC.) === */
 
 /* Layout principal com sidebar e conteúdo */
 .dashboard-layout {
@@ -214,18 +143,18 @@ header h1 {
 /* Estilo do Menu Lateral (Sidebar) */
 .sidebar {
     width: 260px;
-    background-color: #343a40; /* Cor escura para o menu */
+    background-color: #343a40;
     color: #fff;
     display: flex;
     flex-direction: column;
-    position: fixed; /* Fixa o menu na lateral */
+    position: fixed;
     height: 100%;
 }
 
 .sidebar-header {
     padding: 20px;
     text-align: center;
-    background-color: #212529; /* Um pouco mais escuro que o fundo */
+    background-color: #212529;
 }
 
 .sidebar-header h3 {
@@ -240,7 +169,7 @@ header h1 {
 
 .sidebar-nav a {
     display: block;
-    color: #adb5bd; /* Cor clara para o texto */
+    color: #adb5bd;
     text-decoration: none;
     padding: 15px 20px;
     transition: background-color 0.3s, color 0.3s;
@@ -252,13 +181,13 @@ header h1 {
 }
 
 .sidebar-nav a.active {
-    background-color: #007bff; /* Cor primária para o link ativo */
+    background-color: #007bff;
     color: #fff;
     font-weight: bold;
 }
 
 .nav-logout {
-    margin-top: auto; /* Empurra o link 'Sair' para o final */
+    margin-top: auto;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -268,7 +197,7 @@ header h1 {
 .main-content {
     flex-grow: 1;
     padding: 30px;
-    margin-left: 260px; /* Deixa espaço para a sidebar fixa */
+    margin-left: 260px;
     background-color: #f8f9fa;
 }
 
@@ -288,110 +217,38 @@ header h1 {
     margin: 5px 0 0;
 }
 
-/* Estilo dos Cards de Estatísticas */
-.stats-container {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-}
 
-.stat-card {
-    flex: 1;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    text-align: center;
-}
+.stat-card { flex: 1; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; }
+.stat-card h4 { margin: 0 0 10px; color: #6c757d; font-size: 0.9em; }
+.stat-card p { margin: 0; font-size: 2.2em; font-weight: bold; color: #343a40; }
 
-.stat-card h4 {
-    margin: 0 0 10px;
-    color: #6c757d;
-    font-size: 0.9em;
-}
+.dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+.card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.card h2 { margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-.stat-card p {
-    margin: 0;
-    font-size: 2.2em;
-    font-weight: bold;
-    color: #343a40;
-}
+/* Estilos para Formulários Internos (Retirada, Devolução) */
+.form-section { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+.form-section:last-of-type { border-bottom: none; }
+.form-section h2, .form-section legend { font-size: 1.2em; color: #333; margin-bottom: 15px; border-left: 4px solid #0056b3; padding-left: 8px; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+.form-group input[type="text"], .form-group input[type="tel"], .form-group input[type="date"], .form-group input[type="time"], .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+.form-group input[readonly], .form-group select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
+
+.info-box { background-color: #eef7ff; border: 1px solid #bde0fe; padding: 10px; margin-top: 10px; border-radius: 4px; }
+.info-box p { margin: 5px 0; }
+.info-box.hidden { display: none; }
+
+.actions-section { text-align: right; margin-top: 20px; }
+.btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; margin-left: 10px; }
+.btn-primary { background-color: #007bff; color: white; }
+.btn-primary:hover { background-color: #0056b3; }
+.btn-secondary { background-color: #6c757d; color: white; }
+.btn-secondary:hover { background-color: #545b62; }
+
+fieldset[disabled] { opacity: 0.6; cursor: not-allowed; }
 
 /* Cores para os textos de status */
 .text-danger { color: #dc3545; }
 .text-success { color: #28a745; }
-
-
-/* Layout e Estilo dos Cards Principais */
-.dashboard-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-}
-
-.card {
-    background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.card h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-
-/* Estilos específicos dos cards */
-.quick-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.quick-actions .btn {
-    text-align: center;
-    padding: 15px;
-    font-size: 1.1em;
-}
-
-.activity-section {
-    margin-bottom: 25px;
-}
-
-.activity-section:last-child {
-    margin-bottom: 0;
-}
-
-.activity-section h4 {
-    margin: 0 0 10px;
-    font-size: 1em;
-}
-
-.activity-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.activity-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #f1f1f1;
-    font-size: 0.9em;
-}
-
-.activity-list li:last-child {
-    border-bottom: none;
-}
-
-.activity-list .overdue-item {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-fieldset[disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-}

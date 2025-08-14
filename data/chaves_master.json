@@ -23,5 +23,80 @@
     "id": "BIBLIO01",
     "descricao": "Chave Geral Biblioteca",
     "status": "Disponível"
+  },
+  {
+    "id": "SALA101",
+    "descricao": "Sala de Aula 101",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA102",
+    "descricao": "Sala de Aula 102",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA103",
+    "descricao": "Sala de Aula 103",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA104",
+    "descricao": "Sala de Aula 104",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA105",
+    "descricao": "Sala de Aula 105",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA106",
+    "descricao": "Sala de Aula 106",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA107",
+    "descricao": "Sala de Aula 107",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA108",
+    "descricao": "Sala de Aula 108",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA109",
+    "descricao": "Sala de Aula 109",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA110",
+    "descricao": "Sala de Aula 110",
+    "status": "Disponível"
+  },
+  {
+    "id": "SALA111",
+    "descricao": "Sala de Aula 111",
+    "status": "Reservada"
+  },
+  {
+    "id": "SALA112",
+    "descricao": "Sala de Aula 112",
+    "status": "Reservada"
+  },
+  {
+    "id": "SALA113",
+    "descricao": "Sala de Aula 113",
+    "status": "Reservada"
+  },
+  {
+    "id": "SALA114",
+    "descricao": "Sala de Aula 114",
+    "status": "Reservada"
+  },
+  {
+    "id": "SALA115",
+    "descricao": "Sala de Aula 115",
+    "status": "Reservada"
   }
 ]

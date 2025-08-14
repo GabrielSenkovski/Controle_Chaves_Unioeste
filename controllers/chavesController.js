@@ -1,7 +1,7 @@
 // Importa o Model, que contém a lógica de negócio
 const ChavesModel = require('../models/chavesModel');
 
-// Controller para buscar dados iniciais (usado em retirada.js)
+// Controller para buscar dados iniciais usado em retirada.js
 const getDadosIniciais = (req, res) => {
     try {
         const todasAsChaves = ChavesModel.getTodasAsChaves();

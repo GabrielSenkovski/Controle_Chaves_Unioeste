@@ -1,62 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="styles.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistema de Chaves Unioeste</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Login Unioeste</title>
 </head>
-<body class="login-body">
-    <div class="login-container">
-        <header>
-            <h1>Sistema de Controle de Chaves</h1>
-            <p>Acesso Restrito - Unioeste</p>
-        </header>
+<body class="login-page-body">
+    <main class="container">
+        <h1>Login</h1>
+        <form id="form">
 
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">Usuário (SIAPE):</label>
-                <input type="text" id="username" name="username" placeholder="Digite sua matrícula SIAPE" required>
+            <div class="input-box">
+                <input id="email" class="required" type="email" placeholder="E-mail:" value="Audiovisual@unioeste.br" required>
+                <i class='bx bxs-user'></i>
             </div>
-            <div class="form-group">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+
+            <div class="input-box">
+                <input id="senha" class="required" type="password" placeholder="Senha:" required>
+                <i class='bx bxs-lock'></i>
             </div>
-            <div class="actions-section">
-                <button type="submit" class="btn btn-primary btn-full-width">Entrar</button>
+
+            <div class="lembrar-esqueci">
+                <label><input type="checkbox">Lembrar</label>
+                <a href="#">Esqueci a senha</a>
             </div>
-            <div class="forgot-password">
-                <a href="#">Esqueceu sua senha?</a>
+
+            <button type="submit" class="btn-login">Entrar</button>
+
+            <div class="cadastro">
+                <p>Não tem uma conta: <a href="#">Cadastre-se</a> </p>
             </div>
+        
         </form>
-    </div>
+    </main>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginForm = document.getElementById('loginForm');
-        const loginContainer = document.querySelector('.login-container');
+   <script src="login.js"></script>
 
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-
-                if (username === 'admin' && password === '1234') {
-                    alert('Login bem-sucedido! Redirecionando para o sistema.');
-                    // CORREÇÃO APLICADA AQUI:
-                    window.location.href = 'dashboard.html'; 
-                } else {
-                    loginContainer.classList.add('shake');
-                    alert('Usuário ou senha inválidos.');
-                    setTimeout(() => {
-                        loginContainer.classList.remove('shake');
-                    }, 500);
-                }
-            });
-        }
-    });
-    </script>
 </body>
 </html>
