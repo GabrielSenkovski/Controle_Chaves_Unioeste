@@ -1,23 +1,28 @@
 const express = require('express');
 const path = require('path');
-const chavesController = require('./controllers/chavesController'); // Importa o Controller
+
+// 1. Importa as CLASSES, não mais os objetos prontos
+const ChavesModel = require('./models/chavesModel');
+const ChavesController = require('./controllers/chavesController');
+
+// 2. Cria as instâncias (os objetos)
+const chavesModel = new ChavesModel();
+// Injeta o model no construtor do controller
+const chavesController = new ChavesController(chavesModel); 
 
 const app = express();
 const PORT = 3000;
 
-// Configuração dos Middlewares
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Camada de Roteamento ---
-// Define quais funções do Controller respondem a quais rotas da API
+// 3. As rotas agora chamam os MÉTODOS dos objetos instanciados
 app.get('/api/dados-iniciais', chavesController.getDadosIniciais);
 app.get('/api/estado', chavesController.getEstado);
 app.post('/api/retirada', chavesController.registrarRetirada);
 app.post('/api/devolucao', chavesController.registrarDevolucao);
 
-// Inicia o Servidor
 app.listen(PORT, () => {
-    console.log(`Servidor MVC rodando na porta ${PORT}`);
-    console.log(`Acesse o sistema em: http://localhost:${PORT}`);
+    console.log(`Servidor rodando na porta: ${PORT}`);
+    console.log(`em: http://localhost:${PORT}`);
 });
